@@ -367,13 +367,13 @@ ul {
   width: auto;
   padding: 10px 10px 30px 5px;
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-between;
   flex-wrap: wrap;
   padding-bottom: 10px;
 }
 
 /*最後の行が1個の場合、左詰めの見えないbox*/
-.contents li:before {
+.contents li::before {
   content:"";
   display: block;
   width:83.72px;
@@ -381,7 +381,7 @@ ul {
 }
 
  /*最後の行が2個の場合、左詰めの見えないbox*/
-.contents li:after {
+.contents li::after {
   display: block;
   content:"";
   width: 83.72px;
@@ -435,4 +435,7 @@ ul {
   -ms-transform: translate(-50%, -50%);
 }
 
+@media screen and(min-width: 481px) {
+
+}
 </style>

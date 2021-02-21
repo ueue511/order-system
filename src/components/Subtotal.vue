@@ -15,8 +15,7 @@
         <div class="subtotal" v-if="isActive === '1'">
           <span class="tablenameno">
             <p>{{year}}/{{mouth}}/{{day}} {{hours}}:{{minutes}}:{{second}}</p>
-            <p>{{tablemember}}名様</p>
-            <p>{{tableno}}卓</p>
+            <p>{{tablemember}}名様{{tableno}}卓</p>
           </span>
           
           <perfect-scrollbar>
@@ -331,5 +330,14 @@ ul {
   font-weight: bold;
 }
 
-
+/*-----------------------*/
+/*       769px~          */
+/*-----------------------*/
+@media screen and (min-width: 769px) {
+  .lineBottom {
+    margin: 80px 20px 0 20px;
+    width: 93%;
+    border-bottom: 1px #000 solid;
+  }
+}
 </style>

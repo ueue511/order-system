@@ -141,7 +141,6 @@ import { PerfectScrollbar } from "vue2-perfect-scrollbar";
   background-color: #666;
   color: #fff;
   position: absolute;
-  z-index: 1;
   top:44.5vh;
   left: 20vw;
 }
@@ -295,7 +294,7 @@ ul {
   width: auto;
   padding: 10px 10px 30px 5px;
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-between;
   flex-wrap: wrap;
   padding-bottom: 10px;
 }
@@ -347,6 +346,220 @@ ul {
   top: 45vh;
   height: 45vh;
   border-top: 2px solid #666;
+}
+
+/*-----------------------*/
+/*       ~390px~          */
+/*-----------------------*/
+@media screen and (max-width: 390px) {
+   .tabs_table {
+    background-color: #666;
+    color: #fff;
+    position: absolute;
+    top:44.5vh;
+    left: 30vw;
+  }
+
+  .tabs_table label:nth-of-type(1) {
+    position: absolute;
+    color: #fff;
+    width: 60px;
+    border-bottom: 30px solid #666;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    height: 0;
+    text-align: center;
+    line-height: 30px;
+
+    top: -25px;
+    left: -80px;
+
+  }
+
+  .tabs_table label:nth-of-type(2) {
+    position: absolute;
+    color: #fff;
+    width: 60px;
+    border-bottom: 30px solid #666;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    height: 0;
+    text-align: center;
+    line-height: 30px;
+
+    top: -25px;;
+    left: 85px;
+
+  }
+
+  .tabs_table label:nth-of-type(3) {
+    position: absolute;
+    color: #fff;
+    width: 60px;
+    border-bottom: 30px solid #666;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    height: 0;
+    text-align: center;
+    line-height: 30px;
+
+    top: -25px;
+    left: 5px;
+  }
+
+  .tabs_table :checked + label {
+    border-bottom: 30px solid rgb(255, 255, 255);
+    border-left: 10px solid  transparent;
+    border-right: 10px solid  transparent;
+    color: rgb(0, 0, 0);
+  }
+
+  .tabs_table p{
+    font-size: 4vw
+  }
+}
+
+
+/*-----------------------*/
+/*       481px~          */
+/*-----------------------*/
+@media screen and (min-width: 481px) {
+  .tabs_table {
+    background-color: #666;
+    color: #fff;
+    position: absolute;
+    top:44.5vh;
+    left: 30vw;
+  }
+
+  .tabs_table label:nth-of-type(1) {
+    position: absolute;
+    color: #fff;
+    width: 80px;
+    border-bottom: 30px solid #666;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    height: 0;
+    text-align: center;
+    line-height: 30px;
+
+    top: -25px;
+    left: -130px;
+
+  }
+
+  .tabs_table label:nth-of-type(2) {
+    position: absolute;
+    color: #fff;
+    width: 80px;
+    border-bottom: 30px solid #666;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    height: 0;
+    text-align: center;
+    line-height: 30px;
+
+    top: -25px;;
+    left: 130px;
+
+  }
+
+  .tabs_table label:nth-of-type(3) {
+    position: absolute;
+    color: #fff;
+    width: 80px;
+    border-bottom: 30px solid #666;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    height: 0;
+    text-align: center;
+    line-height: 30px;
+
+    top: -25px;
+    left: 5px;
+  }
+
+  .tabs_table :checked + label {
+    border-bottom: 30px solid rgb(255, 255, 255);
+    border-left: 10px solid  transparent;
+    border-right: 10px solid  transparent;
+    color: rgb(0, 0, 0);
+  }
+}
+
+/*-----------------------*/
+/*       769px~          */
+/*-----------------------*/
+@media screen and (min-width: 769px) {
+  .tabs_table {
+    background-color: #666;
+    color: #fff;
+    position: absolute;
+    top:44.5vh;
+    left: 20vw;
+  }
+
+  .tabs_table label:nth-of-type(1) {
+    position: absolute;
+    color: #fff;
+    width: 80px;
+    border-bottom: 30px solid #666;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    height: 0;
+    text-align: center;
+    line-height: 30px;
+
+    top: -25px;
+    left: -130px;
+
+  }
+
+  .tabs_table label:nth-of-type(2) {
+    position: absolute;
+    color: #fff;
+    width: 80px;
+    border-bottom: 30px solid #666;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    height: 0;
+    text-align: center;
+    line-height: 30px;
+
+    top: -25px;;
+    left: 90px;
+
+  }
+
+  .tabs_table label:nth-of-type(3) {
+    position: absolute;
+    color: #fff;
+    width: 80px;
+    border-bottom: 30px solid #666;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    height: 0;
+    text-align: center;
+    line-height: 30px;
+
+    top: -25px;
+    left: -20px;
+  }
+
+  .tabs_table :checked + label {
+    border-bottom: 30px solid rgb(255, 255, 255);
+    border-left: 10px solid  transparent;
+    border-right: 10px solid  transparent;
+    color: rgb(0, 0, 0);
+  }
+
+  .psTabel {
+    position: absolute;
+    top: 45vh;
+    height: 45vh;
+    width: 80vw;
+    border-top: 2px solid #666;
+  }
 }
 
 </style>
