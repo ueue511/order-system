@@ -39,11 +39,11 @@
         </button>
       </ul>
     </div>
-    <Subtotal v-else-if ="show ==='total'" @getChildtrue="OrderShow" :subtotalParent="subtotalList" :TableMember="tablemember" :TableNo="tableno" @getsubtotallist="listReset"></Subtotal>
+    <Subtotal v-else-if ="show ==='total'" @getChildtrue="OrderShow" @Tablelist="ChildSubTotal" :subtotalParent="subtotalList"  :TableMember="tablemember" :TableNo="tableno" :DeleteSub="subtotal_delete" @getsubtotallist="listReset"></Subtotal>
 
-    <TebleGesto v-else-if ="show ==='table'" @Show="Childshow" @Tablelist="ChildSubTotal" @TableNo_table="TableNo" @TableMember_member="TableMember"
+    <TebleGesto v-else-if ="show ==='table'" @Show="Childshow" @Tablelist="ChildSubTotal" @TableNo_table="TableNo" @TableMember_member="TableMember" @Delete="DeleteChild"
     :TableMember="tablemember" :TableNo="tableno" 
-    :subtotalParent="subtotalList"
+    :subtotalParent="subtotalList" :OrderDrink="OrderDrink" :OrderDessert="OrderDessert" :OrderSetMeal="OrderSetMeal"
     ></TebleGesto>
   </div>
 </template>
@@ -58,12 +58,14 @@ import TebleGesto from "./components/TebleGesto";
     },
     data() {
       return {
-        isActive: "1",
-        show: 'menu',
-        // show: 'table',
-        tablemember: "",
-        tableno: "",
-        subtotalList:[],
+        isActive: "1", //ラジオボタンの判定
+        show: 'menu', //ページの判定[menu][table][subtotal]
+        tablemember: "", //人数
+        tableno: "", //テーブル番号
+        subtotalList:[], //商品ボタンを押した際、追加
+        subtotal_delete: "hidden", // 削除ボタンの判定
+        
+        // 各メニューのリスト
         OrderDrink: [
           {order_name: "HC", price:280, full_name: "ブレンドコーヒ", temperature: "hot", img: require("./assets/coffee01_blend.png")},
           {order_name: "HT", price:300, full_name: "紅茶", temperature: "hot", img: require("./assets/coffee03_cafeole.png")},
@@ -95,43 +97,69 @@ import TebleGesto from "./components/TebleGesto";
         ],
       };
     },
+    
     methods: {
+      // 小計の表示
       subtotal() {
         this.show = "total";
       },
+      // メニューの表示
+      // 削除ボタンのリセット"hidden"
       OrderShow() {
         this.show = "menu";
+        this.subtotal_delete = "hidden";
       },
+      // ホームの表示
       TableShow() {
         this.show = "table";
       },
-      
-      Childshow(show) {
-        this.show = show
+      // Childからの表示判定
+      Childshow(child_show) {
+        this.show = child_show
       },
-
+      // 商品ボタンの商品を追加
       SubTotal(full_name, child_price) {
-        this.subtotalList.push({name:full_name, price:child_price})
+        this.subtotalList.push({name:full_name, price:child_price});
       },
-
+      // ホームの注文内容を追加
       ChildSubTotal(tablelist) {
-        for(let i=0; i <= tablelist.length; i++){
-          let table_name = tablelist[i].name;
-          let table_price = tablelist[i].price;
-          this.SubTotal(table_name, table_price)
+        if (tablelist.length !== 0) {
+          for(let i=0; i < tablelist.length; i++){
+            let table_name = tablelist[i].name;
+            let table_price = tablelist[i].price;
+            this.SubTotal(table_name, table_price)
+          }
+        } else {
+            return;
         }
       },
-
+      // childからのテーブル番号の引き継ぎ
       TableNo(no) {
         this.tableno = no;
       },
-
+      // childからの人数の引き継ぎ
       TableMember(no) {
         this.tablemember = no;
       },
-      //子から受け取ったlistResetの中身はfalse 着火のみで使用
+      // 子から受け取ったlistResetの中身はfalse 着火のみで使用
       listReset() {
-        return this.subtotalList = [];
+        return this.subtotalList = [],
+        this.show = "table", 
+        this.tablemember = "", 
+        this.tableno = ""
+      },
+      // ホームからの「取り消し」の受取
+      // 子→親→子の橋渡し
+      DeleteChild(a) {
+        if(a === "visible"){
+          this.subtotal_delete = a;
+        } else {
+            this.subtotal_delete = "hidden";
+        }
+      },
+      // リセット
+      reset() {
+        Object.assign(this.$data, this.subtotal_delete)
       }
     }
   };

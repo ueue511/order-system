@@ -47,21 +47,31 @@ import { PerfectScrollbar } from "vue2-perfect-scrollbar";
 export default {
   data() {
     return {
-      isActive: "1",
+      isActive: "1", //ラジオボタンの判定
+      show: "", //ページの判定[menu][table][subtotal]
+      tableno: this.TableNo, //人数
+      tablemember: this.TableMember, //テーブル番号
+      
+      //年月日時間の表記
       year: new Date().getFullYear(),
       mouth: new Date().getMonth() + 1,
       day: new Date().getDate(),
       hours: new Date().getHours(),
       minutes: new Date().getMinutes(),
       second: new Date().getSeconds(),
-      deleteTrue: "hidden",
-      show_modal: false,
-      delete_contents: [],
-      show: ""
+
+      deleteTrue: this.DeleteSub, //取り消しボタンの表示 非表示
+      show_modal: false, //送信ボタンを押した際、モーダルウィンドの表示判定
+      delete_contents: [], //削除商品を格納するlist
     };
   },
-  props: ["subtotalParent", "tablemember", "tableno"],
-
+  //親からの受け取り
+  props: ["subtotalParent", //注文を受けた商品を入れたlist
+          "TableMember", //人数
+          "TableNo", //テーブル番号
+          "DeleteSub" //ホームから取り消しボタンを押したか判定
+          ],
+  //注文リストの合計金額を計算する関数
   computed: {
     total_all() {
       let list = this.subtotalParent;
@@ -69,14 +79,20 @@ export default {
         return sum + element.price;
         }, 0);
       return price_total;
-    }
+    },
+    // Delete_sub() {
+    //   if(this.DeleteSub === "visible") {
+    //     return this.DeleteSub
+    //   }; 
+    // }
   },
 
   methods: {
+    //注文に移動
     OrderSystem() {
       this.$emit("getChildtrue");
     },
-        
+    //取り消しボタンを押し、削除ボタンの表示判定
     Delete() {
       if(this.deleteTrue === "hidden") {
         return this.deleteTrue = "visible"
@@ -84,11 +100,11 @@ export default {
         return this.deleteTrue = "hidden";
       }
     },
-    
+    //削除ボタンを押した際、削除する関数
     DeleteMenu(index) {
       return this.subtotalParent.splice(index, 1)
     },
-
+    //モーダルウィンド表示判定
     openCloseModal() {
       if(this.show_modal === true) {
         this.show_modal = false;
@@ -98,12 +114,12 @@ export default {
         this.show_modal = true
       }
     },
-
+    //モーダルウィンドの非表示判定
     closeModal() {
       this.show_modal = false;
       this.$emit("getsubtotallist",false);
     },
-
+    //モーダルウィンドの表示文章判定
     send_type() {
       if(this.subtotalParent.length === 0){
         this.send = "未入力"
