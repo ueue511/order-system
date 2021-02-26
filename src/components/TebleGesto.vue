@@ -26,30 +26,25 @@
 
 
         <span class="tabs_table">
-          <input type="radio" id="DrinkTab" value="1" v-model="isActive" />
+          <input type="radio" id="DrinkTab" :value="OrderDrink" v-model="isActive" />
           <label for="DrinkTab"><p>ドリンク</p></label>
-          <input type="radio" id="DessertTab" value="2" v-model="isActive" />
+          <input type="radio" id="DessertTab" :value="OrderDessert" v-model="isActive" />
           <label for="DessertTab"><p>デザート</p></label>
-          <input type="radio" id="SetmealTab" value="3" v-model="isActive" />
+          <input type="radio" id="SetmealTab" :value="OrderSetMeal" v-model="isActive" />
           <label for="SetmealTab"><p>定食</p></label>
         </span>
       <perfect-scrollbar class="psTabel">
-
-        <li v-if="isActive === '1'">
-          <button class="LiItem" v-for="(list, index) in OrderDrink" :key="index" :class="list.temperature">
-            <img :src="list.img" :alt="list.order_name" @click="SubTotal(list.full_name, list.price)"/>
-            <p>{{list.order_name}}{{list.price}}</p>
-          </button>
-        </li>
-        <li v-if="isActive === '2'" >
-          <button class="LiItem" v-for="(list, index) in OrderDessert" :key="index" :class="list.temperature">
-            <img :src="list.img" :alt="list.order_name" @click="SubTotal(list.full_name, list.price)"/>
-            <p>{{list.order_name}}{{list.price}}</p>
-          </button>
-        </li>
-        <li v-if="isActive === '3'">
-          <button class="LiItem" v-for="(list, index) in OrderSetMeal" :key="index" :class="list.temperature">
-            <img :src="list.img" :alt="list.order_name"  @click="SubTotal(list.full_name, list.price)"/>
+        <li>
+          <button
+          class="LiItem"
+          v-for="(list, index) in isActive"
+          :key="index"
+          :class="list.temperature">
+            <img
+            :src="list.img"
+            :alt="list.order_name"
+            @click="SubTotal(list.full_name, list.price)"
+            />
             <p>{{list.order_name}}{{list.price}}</p>
           </button>
         </li>
@@ -62,10 +57,11 @@
 
 <script>
 import { PerfectScrollbar } from "vue2-perfect-scrollbar";
+
   export default {
     data() {
       return {
-        isActive: "2", //ラジオボタンの判定
+        isActive: this.OrderDrink, //ラジオボタンの判定
         show: "", //ページの判定[menu][table][subtotal]
         tableno: this.TableNo, //人数
         tablemember: this.TableMember, //テーブル番号
@@ -116,7 +112,7 @@ import { PerfectScrollbar } from "vue2-perfect-scrollbar";
     },
 
     components: {
-    PerfectScrollbar
+      PerfectScrollbar,
     }
   };
 </script>
@@ -276,18 +272,6 @@ input {
 /*-----------------------*/
 /*      メニュー類        */
 /*-----------------------*/
-.contents {
-  position: relative;
-  width: 80vw;
-  height: 95vh;
-  top: 15px;
-  left: 15px;
-}
-
-ul {
-  margin: 0;
-  padding: 0;
-}
 
 .contents li {
   list-style: none;
@@ -320,25 +304,6 @@ ul {
   border: 1px #000 solid;
   text-align: center;
   margin-bottom: 20px;
-}
-
-.contents .hot {
-  background-color: antiquewhite;
-}
-
-.contents .ice {
-  background-color: aliceblue;
-}
-
-.contents img {
-  object-fit: cover;
-  width: 75.11px;
-  height: 72.64px;
-}
-
-.LiItem p {
-  white-space: nowrap;
-  font-size: 100%;
 }
 
 .psTabel {

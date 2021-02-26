@@ -2,35 +2,32 @@
   <div id="app">
     <div class="vue_radio" v-if="show == 'menu'">
       <div class="tabs">
-        <input type="radio" id="DrinkTab" value="1" v-model="isActive" />
+        <input type="radio" id="DrinkTab" :value="OrderDrink"  v-model="isActive" />
         <label for="DrinkTab">ドリンク</label>
-        <input type="radio" id="DessertTab" value="2" v-model="isActive" />
+        <input type="radio" id="DessertTab" :value="OrderDessert" v-model="isActive" />
         <label for="DessertTab">デザ｜ト</label>
-        <input type="radio" id="SetmealTab" value="3" v-model="isActive" />
+        <input type="radio" id="SetmealTab" :value="OrderSetMeal" v-model="isActive" />
         <label for="SetmealTab">定食</label>
-         <input type="radio" id="SetmealTab" value="3" v-model="isActive" />
+         <input type="radio" />
         <label for="SetmealTab" @click="TableShow">ホ｜ム</label>
       </div>
+
       <ul class="contents">
         <span class="tablenameno">
           <p>{{tablemember}}名様</p>
           <p>{{tableno}}卓</p>
         </span>
-        <li v-if="isActive === '1'">
-          <button class="LiItem" v-for="(list, index) in OrderDrink" :key="index" :class="list.temperature">
-            <img :src="list.img" :alt="list.order_name" @click="SubTotal(list.full_name, list.price)"/>
-            <p>{{list.order_name}}{{list.price}}</p>
-          </button>
-        </li>
-        <li v-if="isActive === '2'" >
-          <button class="LiItem" v-for="(list, index) in OrderDessert" :key="index" :class="list.temperature">
-            <img :src="list.img" :alt="list.order_name" @click="SubTotal(list.full_name, list.price)"/>
-            <p>{{list.order_name}}{{list.price}}</p>
-          </button>
-        </li>
-        <li v-if="isActive === '3'">
-          <button class="LiItem" v-for="(list, index) in OrderSetMeal" :key="index" :class="list.temperature">
-            <img :src="list.img" :alt="list.order_name"  @click="SubTotal(list.full_name, list.price)"/>
+        <li>
+          <button
+          class="LiItem"
+          v-for="(list, index) in isActive"
+          :key="index"
+          :class="list.temperature">
+            <img
+            :src="list.img"
+            :alt="list.order_name"
+            @click="SubTotal(list.full_name, list.price)"
+            />
             <p>{{list.order_name}}{{list.price}}</p>
           </button>
         </li>
@@ -39,16 +36,34 @@
         </button>
       </ul>
     </div>
-    <Subtotal v-else-if ="show ==='total'" @getChildtrue="OrderShow" @Tablelist="ChildSubTotal" :subtotalParent="subtotalList"  :TableMember="tablemember" :TableNo="tableno" :DeleteSub="subtotal_delete" @getsubtotallist="listReset"></Subtotal>
 
-    <TebleGesto v-else-if ="show ==='table'" @Show="Childshow" @Tablelist="ChildSubTotal" @TableNo_table="TableNo" @TableMember_member="TableMember" @Delete="DeleteChild"
-    :TableMember="tablemember" :TableNo="tableno" 
-    :subtotalParent="subtotalList" :OrderDrink="OrderDrink" :OrderDessert="OrderDessert" :OrderSetMeal="OrderSetMeal"
-    ></TebleGesto>
+    <Subtotal v-else-if ="show ==='total'"
+      @getChildtrue="OrderShow" 
+      @Tablelist="ChildSubTotal" 
+      @getsubtotallist="listReset" 
+      :subtotalParent="subtotalList"  
+      :TableMember="tablemember" 
+      :TableNo="tableno" :DeleteSub="subtotal_delete">
+    </Subtotal>
+
+    <TebleGesto v-else-if ="show ==='table'"
+      @Show="Childshow" 
+      @Tablelist="ChildSubTotal" 
+      @TableNo_table="TableNo" 
+      @TableMember_member="TableMember" 
+      @Delete="DeleteChild"
+      :TableMember="tablemember" 
+      :TableNo="tableno" 
+      :subtotalParent="subtotalList" 
+      :OrderDrink="OrderDrink" 
+      :OrderDessert="OrderDessert" 
+      :OrderSetMeal="OrderSetMeal">
+    </TebleGesto>
   </div>
 </template>
 
 <script>
+
 import Subtotal from "./components/Subtotal";
 import TebleGesto from "./components/TebleGesto";
   export default {
@@ -57,24 +72,24 @@ import TebleGesto from "./components/TebleGesto";
      TebleGesto,
     },
     data() {
+      //初期の表示メニュー"OrederDrink"の定数
+      const OrderDrink = [
+        {order_name: "HC", price:280, full_name: "ブレンドコーヒ", temperature: "hot", img: require("./assets/coffee01_blend.png")},
+        {order_name: "HT", price:300, full_name: "紅茶", temperature: "hot", img: require("./assets/coffee03_cafeole.png")},
+        {order_name: "ラテ", price:350, full_name: "カフェラテ", temperature: "hot", img: require("./assets/drink_tea_chai.png")},
+        {order_name: "IC", price:300,full_name: "アイスコーヒー", temperature: "ice", img: require("./assets/coffee10_iced_coffee.png")},
+        {order_name: "Iラテ", price:350,full_name: "アイスラテ", temperature: "ice", img: require("./assets/coffee11_iced_milk_coffee.png")},
+        {order_name: "CF", price:550,full_name: "コーヒーフロート", temperature: "ice", img: require("./assets/drink_coffee_float.png")}
+      ];
       return {
-        isActive: "1", //ラジオボタンの判定
+        isActive: OrderDrink, //ラジオボタンの判定
         show: 'menu', //ページの判定[menu][table][subtotal]
         tablemember: "", //人数
         tableno: "", //テーブル番号
         subtotalList:[], //商品ボタンを押した際、追加
         subtotal_delete: "hidden", // 削除ボタンの判定
-        
         // 各メニューのリスト
-        OrderDrink: [
-          {order_name: "HC", price:280, full_name: "ブレンドコーヒ", temperature: "hot", img: require("./assets/coffee01_blend.png")},
-          {order_name: "HT", price:300, full_name: "紅茶", temperature: "hot", img: require("./assets/coffee03_cafeole.png")},
-          {order_name: "ラテ", price:350, full_name: "カフェラテ", temperature: "hot", img: require("./assets/drink_tea_chai.png")},
-          {order_name: "IC", price:300,full_name: "アイスコーヒー", temperature: "ice", img: require("./assets/coffee10_iced_coffee.png")},
-          {order_name: "Iラテ", price:350,full_name: "アイスラテ", temperature: "ice", img: require("./assets/coffee11_iced_milk_coffee.png")},
-          {order_name: "CF", price:550,full_name: "コーヒーフロート", temperature: "ice", img: require("./assets/drink_coffee_float.png")}
-        ],
-
+        OrderDrink: OrderDrink,
         OrderDessert: [
           {order_name: "アイス", price:300,full_name: "バニラアイス", temperature: "ice", img: require("./assets/sweets_icecream01_vanilla.png")},
           {order_name: "ケーキ", price:330,full_name: "いちごケーキ", temperature: "ice", img: require("./assets/sweets_shortcake.png")},
@@ -95,7 +110,7 @@ import TebleGesto from "./components/TebleGesto";
           {order_name: "お好み", price:680,full_name: "お好み焼き", temperature: "hot", img: require("./assets/food_okonomiyaki_kyabetsuyaki_decoration.png")},
           {order_name: "餃子", price:250,full_name: "餃子", temperature: "hot", img: require("./assets/food_gyouza_age.png")}
         ],
-      };
+      };     
     },
     
     methods: {
@@ -157,10 +172,6 @@ import TebleGesto from "./components/TebleGesto";
             this.subtotal_delete = "hidden";
         }
       },
-      // リセット
-      reset() {
-        Object.assign(this.$data, this.subtotal_delete)
-      }
     }
   };
 </script>
@@ -360,39 +371,6 @@ input {
 ul {
   margin: 0;
   padding: 0;
-}
-
-.contents li {
-  list-style: none;
-  width: auto;
-  padding: 10px 10px 30px 5px;
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  padding-bottom: 10px;
-}
-
-/*最後の行が1個の場合、左詰めの見えないbox*/
-.contents li::before {
-  content:"";
-  display: block;
-  width:83.72px;
-  order:1;
-}
-
- /*最後の行が2個の場合、左詰めの見えないbox*/
-.contents li::after {
-  display: block;
-  content:"";
-  width: 83.72px;
-}
-
-.contents .LiItem {
-  width: 83.72px;
-  height: 98.5px;
-  border: 1px #000 solid;
-  text-align: center;
-  margin-bottom: 20px;
 }
 
 .contents .hot {
