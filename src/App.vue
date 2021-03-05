@@ -1,179 +1,12 @@
 <template>
   <div id="app">
-    <div class="vue_radio" v-if="show == 'menu'">
-      <div class="tabs">
-        <input type="radio" id="DrinkTab" :value="OrderDrink"  v-model="isActive" />
-        <label for="DrinkTab">ドリンク</label>
-        <input type="radio" id="DessertTab" :value="OrderDessert" v-model="isActive" />
-        <label for="DessertTab">デザ｜ト</label>
-        <input type="radio" id="SetmealTab" :value="OrderSetMeal" v-model="isActive" />
-        <label for="SetmealTab">定食</label>
-         <input type="radio" />
-        <label for="SetmealTab" @click="TableShow">ホ｜ム</label>
-      </div>
-
-      <ul class="contents">
-        <span class="tablenameno">
-          <p>{{tablemember}}名様</p>
-          <p>{{tableno}}卓</p>
-        </span>
-        <li>
-          <button
-          class="LiItem"
-          v-for="(list, index) in isActive"
-          :key="index"
-          :class="list.temperature">
-            <img
-            :src="list.img"
-            :alt="list.order_name"
-            @click="SubTotal(list.full_name, list.price)"
-            />
-            <p>{{list.order_name}}{{list.price}}</p>
-          </button>
-        </li>
-        <button class="pay" @click="subtotal">
-          小計
-        </button>
-      </ul>
-    </div>
-
-    <Subtotal v-else-if ="show ==='total'"
-      @getChildtrue="OrderShow" 
-      @Tablelist="ChildSubTotal" 
-      @getsubtotallist="listReset" 
-      :subtotalParent="subtotalList"  
-      :TableMember="tablemember" 
-      :TableNo="tableno" :DeleteSub="subtotal_delete">
-    </Subtotal>
-
-    <TebleGesto v-else-if ="show ==='table'"
-      @Show="Childshow" 
-      @Tablelist="ChildSubTotal" 
-      @TableNo_table="TableNo" 
-      @TableMember_member="TableMember" 
-      @Delete="DeleteChild"
-      :TableMember="tablemember" 
-      :TableNo="tableno" 
-      :subtotalParent="subtotalList" 
-      :OrderDrink="OrderDrink" 
-      :OrderDessert="OrderDessert" 
-      :OrderSetMeal="OrderSetMeal">
-    </TebleGesto>
+    <router-view />
   </div>
 </template>
 
 <script>
 
-import Subtotal from "./components/Subtotal";
-import TebleGesto from "./components/TebleGesto";
-  export default {
-    components: {
-     Subtotal,
-     TebleGesto,
-    },
-    data() {
-      //初期の表示メニュー"OrederDrink"の定数
-      const OrderDrink = [
-        {order_name: "HC", price:280, full_name: "ブレンドコーヒ", temperature: "hot", img: require("./assets/coffee01_blend.png")},
-        {order_name: "HT", price:300, full_name: "紅茶", temperature: "hot", img: require("./assets/coffee03_cafeole.png")},
-        {order_name: "ラテ", price:350, full_name: "カフェラテ", temperature: "hot", img: require("./assets/drink_tea_chai.png")},
-        {order_name: "IC", price:300,full_name: "アイスコーヒー", temperature: "ice", img: require("./assets/coffee10_iced_coffee.png")},
-        {order_name: "Iラテ", price:350,full_name: "アイスラテ", temperature: "ice", img: require("./assets/coffee11_iced_milk_coffee.png")},
-        {order_name: "CF", price:550,full_name: "コーヒーフロート", temperature: "ice", img: require("./assets/drink_coffee_float.png")}
-      ];
-      return {
-        isActive: OrderDrink, //ラジオボタンの判定
-        show: 'menu', //ページの判定[menu][table][subtotal]
-        tablemember: "", //人数
-        tableno: "", //テーブル番号
-        subtotalList:[], //商品ボタンを押した際、追加
-        subtotal_delete: "hidden", // 削除ボタンの判定
-        // 各メニューのリスト
-        OrderDrink: OrderDrink,
-        OrderDessert: [
-          {order_name: "アイス", price:300,full_name: "バニラアイス", temperature: "ice", img: require("./assets/sweets_icecream01_vanilla.png")},
-          {order_name: "ケーキ", price:330,full_name: "いちごケーキ", temperature: "ice", img: require("./assets/sweets_shortcake.png")},
-          {order_name: "パフェ", price:580,full_name: "いちごパフェ", temperature: "ice", img: require("./assets/sweets_pafe_parfait_ichigo.png")},
-          {order_name: "set Hot", price:120,full_name: "セットコーヒー", temperature: "hot", img: require("./assets/coffee01_blend.png")},
-          {order_name: "set Ice", price:300,full_name: "セットアイス", temperature: "ice", img: require("./assets/coffee10_iced_coffee.png")}
-        ],
-        
-        OrderSetMeal: [
-          {order_name: "カレー", price:680,full_name: "ビーフカレー", temperature: "hot", img: require("./assets/food_curryrice_white.png")},
-          {order_name: "カツ", price:780, full_name: "ソースカツ定食", temperature: "hot",img: require("./assets/food_kanazawa_curry.png")},
-          {order_name: "天津丼", price:700,  full_name: "天津丼", temperature: "hot",img: require("./assets/food_kanitama_tenshinhan.png")},
-          {order_name: "かつ丼", price:880,full_name: "ソースかつ丼", temperature: "hot", img: require("./assets/food_sauce_katsudon_fukui.png")},
-          {order_name: "うなぎ", price:1000,full_name: "うな重", temperature: "hot", img: require("./assets/food_unagi_ochaduke.png")},
-          {order_name: "スパ", price:880,full_name: "ボンゴレ", temperature: "hot", img: require("./assets/food_spaghetti_vongole_bianco.png")},
-          {order_name: "担々麵", price:650,full_name: "担々麺", temperature: "hot", img: require("./assets/ramen_top_tantanmen.png")},
-          {order_name: "ラーメン", price:320,full_name: "豚骨ラーメン", temperature: "hot", img: require("./assets/ramen_top_tonkotsu.png")},
-          {order_name: "お好み", price:680,full_name: "お好み焼き", temperature: "hot", img: require("./assets/food_okonomiyaki_kyabetsuyaki_decoration.png")},
-          {order_name: "餃子", price:250,full_name: "餃子", temperature: "hot", img: require("./assets/food_gyouza_age.png")}
-        ],
-      };     
-    },
-    
-    methods: {
-      // 小計の表示
-      subtotal() {
-        this.show = "total";
-      },
-      // メニューの表示
-      // 削除ボタンのリセット"hidden"
-      OrderShow() {
-        this.show = "menu";
-        this.subtotal_delete = "hidden";
-      },
-      // ホームの表示
-      TableShow() {
-        this.show = "table";
-      },
-      // Childからの表示判定
-      Childshow(child_show) {
-        this.show = child_show
-      },
-      // 商品ボタンの商品を追加
-      SubTotal(full_name, child_price) {
-        this.subtotalList.push({name:full_name, price:child_price});
-      },
-      // ホームの注文内容を追加
-      ChildSubTotal(tablelist) {
-        if (tablelist.length !== 0) {
-          for(let i=0; i < tablelist.length; i++){
-            let table_name = tablelist[i].name;
-            let table_price = tablelist[i].price;
-            this.SubTotal(table_name, table_price)
-          }
-        } else {
-            return;
-        }
-      },
-      // childからのテーブル番号の引き継ぎ
-      TableNo(no) {
-        this.tableno = no;
-      },
-      // childからの人数の引き継ぎ
-      TableMember(no) {
-        this.tablemember = no;
-      },
-      // 子から受け取ったlistResetの中身はfalse 着火のみで使用
-      listReset() {
-        return this.subtotalList = [],
-        this.show = "table", 
-        this.tablemember = "", 
-        this.tableno = ""
-      },
-      // ホームからの「取り消し」の受取
-      // 子→親→子の橋渡し
-      DeleteChild(a) {
-        if(a === "visible"){
-          this.subtotal_delete = a;
-        } else {
-            this.subtotal_delete = "hidden";
-        }
-      },
-    }
-  };
+
 </script>
 <style>
 html, body, div, span, object, iframe,
@@ -226,6 +59,8 @@ a {
   font-size:100%;
   vertical-align:baseline;
   background:transparent;
+  text-decoration: none;
+  color: #fff
 }
 
 /* change colours to suit your needs */
@@ -283,8 +118,6 @@ button{
   appearance: none;
 }
 
-
-
 /*-----------------------*/
 /*          tab          */
 /*-----------------------*/
@@ -299,97 +132,21 @@ button{
   background-color:#fff;
 }
 
-.tabs {
-  background-color: #666;
-  color: #fff;
-  position: absolute;
-  left: 83%;
-  top: 2%;
-}
-
-.tabs label {
-  padding: 5px 15px;
-  cursor: pointer;
-  display: block;
-  width: 20px;
-  height: 123.12px;
-  font-family: Roboto;
-  font-size: 20px;
-  line-height: 1.5em;
-}
-
-.tabs label:nth-of-type(2) {
-  position: absolute;
-  top:150px;
-  background-color: #666;
-  color: #fff;
-}
-
-.tabs label:nth-of-type(3) {
-  position: absolute;
-  top:300px;
-  background-color: #666;
-  color: #fff;
-}
-
-.tabs label:nth-of-type(4) {
-  position: absolute;
-  top:450px;
-  background-color: #666;
-  color: #fff;
-}
-
-.tabs :checked + label {
-  background-color: rgb(255, 255, 255);
-  color: rgb(0, 0, 0);
-}
-
 input {
   display: none;
-}
-
-.tablenameno {
-  display: flex;
-  padding: 5px 0 0 30px;
-}
-
-.tablenameno p:nth-of-type(2) {
-  padding-left: 20px;
 }
 
 /*-----------------------*/
 /*      メニュー類        */
 /*-----------------------*/
+
+
 .contents {
   position: relative;
   width: 80vw;
   height: 95vh;
   top: 15px;
   left: 15px;
-}
-
-ul {
-  margin: 0;
-  padding: 0;
-}
-
-.contents .hot {
-  background-color: antiquewhite;
-}
-
-.contents .ice {
-  background-color: aliceblue;
-}
-
-.contents img {
-  object-fit: cover;
-  width: 75.11px;
-  height: 72.64px;
-}
-
-.LiItem p {
-  white-space: nowrap;
-  font-size: 100%;
 }
 
 .pay {
@@ -411,9 +168,5 @@ ul {
   transform: translate(-50%, -50%);
   -webkit-transform: translate(-50%, -50%);
   -ms-transform: translate(-50%, -50%);
-}
-
-@media screen and(min-width: 481px) {
-
 }
 </style>
