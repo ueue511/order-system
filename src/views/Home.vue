@@ -7,13 +7,14 @@
     <ul class="contents">
       <TimeMenber />
       <Munebutton 
-        :MuneListNum="isActive"
+        :MuneListNum = "isActive"
       />
-      <router-link :to="{name: 'Subtotal'}">
-        <button class="pay" @click="SubTotal_show('hidden')">
+      <button @click="ResetDelete" class="pay">
+        <router-link :to="{name: 'Subtotal'}">
           小計
-        </button>
-      </router-link>
+        </router-link>
+      </button>
+
     </ul>
   </div>
 </template>
@@ -30,15 +31,19 @@ import TimeMenber from '../components/TimeMenber.vue';
     },
     data() {
       return {
-        isActive: 1,
+        isActive: "",
         tabs: 'home',
         subtotalList:[], //商品ボタンを押した際、追加
-        subtotal_delete: "hidden", // 削除ボタンの判定
         tablemember: "",
         tableno: ""
       };     
     },
     
+    // 初期ロードの判定 isActiveの内容変化でメニューを表示させている
+    mounted: function() {
+      this.isActive = this.$store.state.isAction;
+    },
+
     methods: {
       // 移動の際 消去ボタン非表示
       SubTotal_show(show) {
@@ -46,6 +51,9 @@ import TimeMenber from '../components/TimeMenber.vue';
       },
       ShowNum(isActiveChild) {
         return this.isActive=isActiveChild
+      },
+      ResetDelete(){
+        this.$store.commit('ResetDelete')
       }
     },
   };

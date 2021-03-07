@@ -9,6 +9,8 @@ export default new Vuex.Store({
     DeleteSub: "hidden",
     tablemember: "", //人数
     tableno: "", //テーブル番号
+    isAction: 1,
+    showid: "" //商品ボタンの個数表示
   },
   mutations: {
     // 商品ボタンの商品を追加
@@ -26,12 +28,15 @@ export default new Vuex.Store({
       //false判定、新規作成
       if (result) {
         let index = mune_id - 1
-        state.subtotalList[index].quantity++
+        state.subtotalList[index].quantity++;
+        state.showid = state.subtotalList[index].quantity;
       } else {
         state.subtotalList.push({ name: full_name, price: child_price, quantity: 1 });
+        state.showid = 1
       }
     },
 
+    //全てリセット
     ResetList(state) {
       state.subtotalList = [];
       state.tablemember = "";
@@ -46,6 +51,12 @@ export default new Vuex.Store({
         return state.DeleteSub = "hidden";
       }
     },
+
+    // 取り消しボタンのリセット
+    ResetDelete(state) {
+      state.DeleteSub = "hidden"
+    },
+
     //客数・卓番の追加
     GestoMenber(state, menber) {
       return state.tablemember = menber

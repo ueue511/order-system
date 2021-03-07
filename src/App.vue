@@ -123,8 +123,6 @@ button{
 /*-----------------------*/
 #app {
   width: auto;
-  height: 736vh;
-  background-color: #F5F5F4;
   z-index: -999;
 }
 
@@ -143,10 +141,8 @@ input {
 
 .contents {
   position: relative;
-  width: 80vw;
+  width: 88vw;
   height: 95vh;
-  top: 15px;
-  left: 15px;
 }
 
 .pay {

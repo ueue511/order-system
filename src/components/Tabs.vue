@@ -21,9 +21,9 @@
     <div class="tabs" v-else-if="tabsshow === 'tablegesto'">
         <label><router-link :to="{name: 'Subtotal'}">小計</router-link></label>
         <label><router-link :to="{name: 'Home'}">注文</router-link></label>
-        <label for="SetmealTab" @click="SubTotal_show('visible')">
+        <!-- <label for="SetmealTab" @click="SubTotal_show('visible')">
           <router-link :to="{name: 'Subtotal'}">取り消し</router-link>
-        </label>
+        </label> -->
     </div>
 </template>
 <script>
@@ -65,8 +65,7 @@ export default {
   background-color: #666;
   color: #fff;
   position: absolute;
-  left: 83%;
-  top: 2%;
+  left: 88%;
 }
 
 .tabs label {
@@ -74,7 +73,7 @@ export default {
   cursor: pointer;
   display: block;
   width: 20px;
-  height: 123.12px;
+  height: 124px;
   font-family: Roboto;
   font-size: 20px;
   line-height: 1.5em;
@@ -82,21 +81,21 @@ export default {
 
 .tabs label:nth-of-type(2) {
   position: absolute;
-  top:150px;
+  top:133px;
   background-color: #666;
   color: #fff;
 }
 
 .tabs label:nth-of-type(3) {
   position: absolute;
-  top:300px;
+  top:265px;
   background-color: #666;
   color: #fff;
 }
 
 .tabs label:nth-of-type(4) {
   position: absolute;
-  top:450px;
+  top:397px;
   background-color: #666;
   color: #fff;
 }

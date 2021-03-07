@@ -5,8 +5,8 @@
         :Tabsnumchild="tabs"
       />
       <div class="contents">
+        <TimeMenber />
         <div class="subtotal" v-if="isActive === '1'">
-          <TimeMenber />
           <perfect-scrollbar>
             <button class="lain_click" 
               v-for="(list,index) in $store.state.subtotalList" :key="index">
@@ -86,11 +86,11 @@ export default {
 /*          小計         */
 /*-----------------------*/
 .subtotal {
-  width: 90%;
+  width: 93%;
   height: 78vh;
   position: absolute;
   left: 16.5px;
-  top: 10px;
+  top: 35px;
 }
 
 .subtotal p {

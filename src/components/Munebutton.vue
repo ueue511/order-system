@@ -4,13 +4,15 @@
   class="LiItem"
   v-for="(list, index) in this.lists.data"
   :key="index"
-  :class="list.temperature">
+  :class="[list.temperature, {push: shownum === index}]"
+  >
     <img
     :src= list.img
     :alt= list.order_name
-    @click="SubTotal(list.full_name, list.price)"
+    @click="SubTotal(list.full_name, list.price); Push(index)"
     />
     <p>{{list.order_name}}{{list.price}}</p>
+    <div v-if="shownum === index" class="counter">{{ itemnum }}</div>
   </button>
 </li>
 </template>
@@ -20,7 +22,10 @@ import axios from "axios";
 export default {
   data() {
     return {
-      lists: ""
+      lists: "",
+      show: false,
+      shownum: "",
+      itemnum: "",
     }
   },
   props: ["MuneListNum"],
@@ -29,9 +34,17 @@ export default {
     SubTotal(full_name, child_price) {
       this.$store.commit('SubTotalVuex', {full_name, child_price});
     },
+    Push(index) {
+      this.show = true;
+      this.shownum = index;
+      this.itemnum = this.$store.state.showid;
+    }
   },
   watch: {
     MuneListNum: async function() {
+      //個数表示をリセット
+      this.show = false;
+      this.shownum = ""
       if(this.MuneListNum === 2) {
         this.lists = await axios.get("orderdessert.json");
       } else if (this.MuneListNum === 3 ) {
@@ -105,5 +118,29 @@ ul {
 .LiItem p {
   white-space: nowrap;
   font-size: 100%;
+}
+
+/*-----------------------*/
+/*      カウント設置      */
+/*-----------------------*/
+button {
+  position: relative;
+}
+
+.counter {
+  position: absolute;
+  display: inline-block;
+  border: #7DCBD0 solid 2px;
+  border-radius: 50%;
+  background: #fff;
+  width: 30%;
+  height: 25px;
+  top:-12%;
+  right: -10%;
+  line-height: 25px;
+}
+
+.push {
+  border: 3px #7DCBD0 solid !important;
 }
 </style>
